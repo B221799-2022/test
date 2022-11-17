@@ -43,6 +43,9 @@ while 1:
     for item in species1:
       tem.add(item)
   count=len(tem)
+  with open("species.txt","w")as species:
+    for i in tem:
+      species.write(i+'\n')
   print("The number of species is",count)
 
 #define a function to obtain user's ideas
