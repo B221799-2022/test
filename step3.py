@@ -116,12 +116,12 @@ while 1:
     choice=input("Do you wanna to select the number of sequence you are interested in?y/n")
     if choice.upper()=="Y":
       length=input("Perfect, the sequence length is...(enter a number)")
-      if length.isdigit():
+      if length.isdigit() and len(length)>1:
         print("Thank you, we got it!")
         length1=length
         b="bye"
       else:
-        print("Sorry, the length should be some numbers......")
+        print("Sorry, the length should be some numbers and more than 1......")
         length=input("Please enter the sequence length again...")
         length1=length
         b="bye"
@@ -151,6 +151,7 @@ while 1:
     global c
     global IDuser
     global IDuserlist
+    global option
     c=("")
     IDuserlist=[]
     choice1=input("Do you wanna to select the accession ID?y/n")
@@ -172,6 +173,15 @@ while 1:
         end=option
         if end=="N":
           break
+        elif end=="Y":
+          continue
+        else:
+          print("Sorry,you should type y/n,,please type again...")
+          option=input("Do you wanna choose ID again?y/n").upper()[0]
+          if option=="Y":
+            continue
+          else:
+            break
       c="bye"
     elif choice1.upper()=="N":
       print("That is fine, we can ignore it...")
@@ -195,6 +205,7 @@ while 1:
     global p
     global suser
     global suserlist
+    global option1
     p=("")
     suserlist=[]
     choice2=input("Do you wanna to choose the species?y/n")
@@ -216,6 +227,15 @@ while 1:
         end1=option1
         if end1=="N":
           break
+        elif end1=="Y":
+          continue
+        else:
+          print("Sorry,something is wrong,please type again...")
+          option1=input("Do you wanna choose again?y/n").upper()[0]
+          if option1=="Y":
+            continue
+          else:
+            break
       p="bye"
     elif choice2.upper()=="N":
       print("That is fine, we can ignore it...")
@@ -227,4 +247,23 @@ while 1:
   g=p
   if g=="bye":
     break
-
+print("Okay, the species you have chosen are as below:")
+for i in suserlist:
+  print(i)
+#change the template ana.fastas into a normal fasta file(delete the '?')
+final1=[]
+final2=[]
+with open("ana3.fasta","r")as f:
+  lines=f.readlines()
+  for i in lines:
+    i1=i.split("?")
+    final1.append(i1[0])
+    final2.append(i1[-1])
+final=[]
+with open("final.fasta","w")as file:
+  for i in range(0,len(final1)):
+    final=final1[i]+'\n'+final2[i]
+    file.write(final)
+#cluster the sequences the user chose
+cmdc="clustalo -i final.fasta -o cluster.txt -v"
+os.system(cmdc)
