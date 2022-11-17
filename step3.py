@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import os,re
+import os,re,PIL
 
 #The 1st section of the step--count the sequence number
 while 1:
@@ -116,7 +116,7 @@ while 1:
     choice=input("Do you wanna to select the number of sequence you are interested in?y/n")
     if choice.upper()=="Y":
       length=input("Perfect, the sequence length is...(enter a number)")
-      if length.isdigit() and len(length)>1:
+      if length.isdigit():
         print("Thank you, we got it!")
         length1=length
         b="bye"
@@ -193,9 +193,13 @@ while 1:
   h=c
   if h=="bye":
     break
-print("Okay,file has been created\nYou have chosen the accessions as below:")
-for i in IDuserlist:
-  print(i)
+if IDuserlist!=[]:
+  print("Okay,file has been created\nYou have chosen the accessions as below:")
+  for i in IDuserlist:
+    print(i)
+  print("We are going to the next step then")
+else:
+  print("We are going to the next step then")
 #ask the users to choose the species they are interested in
 while 1:
   g="hi"
@@ -265,5 +269,43 @@ with open("final.fasta","w")as file:
     final=final1[i]+'\n'+final2[i]
     file.write(final)
 #cluster the sequences the user chose
-cmdc="clustalo -i final.fasta -o cluster.txt -v"
+cmdc="clustalo -i final.fasta -o cluster.txt -v --force"
 os.system(cmdc)
+#use plotcon to make the graph and obtain the data
+while 1:
+  global size
+  global idea
+  global gr
+  global go
+  gr=0
+  def winsize():
+    global idea
+    go="Y"
+    size=input("It is up to you to choose the window size\nWhat is it(enter a number)")
+    if size.isdigit():
+      cmdd="plotcon cluster.txt -winsize "+size+" -graph png"
+      os.system(cmdd)
+      print("Ok,the file is created")
+      from PIL import Image
+      img=Image.open("plotcon.1.png")
+      img.show()
+      idea=input("Do you want to change the window size?y/n").upper()[0]
+    else:
+      print("Sorry,you typed wrong,please enter a number")
+      winsize()
+  winsize()
+  go=idea
+  if go=="Y":
+    continue
+  elif go=="N":
+    break
+  else:
+    print("You typed wrong...")
+    idea=input("Please enter it again").upper()[0]
+    if idea=="Y":
+      continue
+    else:
+      break
+  gr=1
+  if gr==1:
+    break
