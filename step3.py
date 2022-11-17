@@ -47,7 +47,6 @@ while 1:
     for i in tem:
       species.write(i+'\n')
   print("The number of species is",count)
-
 #define a function to obtain user's ideas
   def answercount():
     global a
@@ -138,14 +137,16 @@ while 1:
       print("Sorry, you typed wrong...please check again")
       answer()
   answer()
-  command1="head -n"+length1+" fastafile.fasta > ana1.txt"
+  command1="head -n"+length1+" fastafile.fasta > ana1.fasta"
   os.system(command1)
   n=b
   if n=="bye":
     break
-#ask the users to choose the accessiion ID
+#ask the users to choose the accession ID
 while 1:
   h="hi"
+  command11="cp ana1.fasta ana2.fasta"
+  os.system(command11)
   def answer1():
     global c
     global IDuser
@@ -161,7 +162,7 @@ while 1:
           IDuser=input("Cool,the ID is...(enter the accession ID from NCBI)")
           if IDuser in ID:
             IDuserlist.append(IDuser)
-            command2="grep -w "+IDuser+" fastafile.fasta >> ana3.txt"
+            command2="grep -w "+IDuser+" fastafile.fasta >> ana2.fasta"
             os.system(command2)
             option=input("Do you wanna choose another ID?y/n").upper()[0]
           else:
@@ -174,8 +175,6 @@ while 1:
       c="bye"
     elif choice1.upper()=="N":
       print("That is fine, we can ignore it...")
-      command3="cp ana1.txt ana2.txt"
-      os.system(command3)
       c="bye"
     else:
       print("Sorry,you typed wrong...please check it again")
@@ -184,5 +183,48 @@ while 1:
   h=c
   if h=="bye":
     break
-print(IDuserlist)
+print("Okay,file has been created\nYou have chosen the accessions as below:")
+for i in IDuserlist:
+  print(i)
+#ask the users to choose the species they are interested in
+while 1:
+  g="hi"
+  command22="cp ana2.fasta ana3.fasta"
+  os.system(command22)
+  def answer2():
+    global p
+    global suser
+    global suserlist
+    p=("")
+    suserlist=[]
+    choice2=input("Do you wanna to choose the species?y/n")
+    if choice2.upper()=="Y":
+      while 1:
+        end1="Y"
+        def species():
+          global option1
+          suser=input("Cool,the species is...(enter the full species name from NCBI)")
+          if suser in tem:
+            suserlist.append(suser)
+            command3="grep -w "+"\'"+suser+"\'"+" fastafile.fasta >> ana3.fasta"
+            os.system(command3)
+            option1=input("Do you wanna choose another species?y/n").upper()[0]
+          else:
+            print("Sorry, you may typed something wrong, please enter again...")
+            species()
+        species()
+        end1=option1
+        if end1=="N":
+          break
+      p="bye"
+    elif choice2.upper()=="N":
+      print("That is fine, we can ignore it...")
+      p="bye"
+    else:
+      print("Sorry,you typed wrong...please check it again")
+      answer2()
+  answer2()
+  g=p
+  if g=="bye":
+    break
 
