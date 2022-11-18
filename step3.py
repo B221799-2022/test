@@ -271,6 +271,10 @@ with open("final.fasta","w")as file:
 #cluster the sequences the user chose
 cmdc="clustalo -i final.fasta -o cluster.txt -v --force"
 os.system(cmdc)
+#use infoalign to display the basic information about the multiple sequence alignment
+cmdi="infoalign cluster.txt infoalign.txt -nousa"
+os.system(cmdi)
+print("You can read the identity or other information from the text file created")
 #use plotcon to make the graph and obtain the data
 while 1:
   global size
@@ -280,6 +284,7 @@ while 1:
   gr=0
   def winsize():
     global idea
+    global size
     go="Y"
     size=input("It is up to you to choose the window size\nWhat is it(enter a number)")
     if size.isdigit():
@@ -309,3 +314,26 @@ while 1:
   gr=1
   if gr==1:
     break
+#export the data of plotcon
+cmdd1="plotcon cluster.txt -winsize "+size+" -graph data"
+os.system(cmdd1)
+cmdd2="grep -v '##' plotcon1.dat > plotcon.txt"
+os.system(cmdd2)
+cmdd3="grep -w 'Ymax' plotcon1.dat"
+os.system(cmdd3)
+print("The line shows above means\nX means the number of residue,so Xmax means how many residues do we have\nY means the number of similarity")
+with open("plotcon.txt","r")as f:
+  lines=f.readlines()
+  sum=0
+  l=0
+  li=[]
+  for i in lines:
+    i1=i.split("\t")[1]
+    li.append(i1)
+  for a in li:
+    a1=float(a)
+    l=l+1
+    sum=sum+a1
+    avg=sum/l
+    avg=('%.4f' % avg)
+print("The average of the similarity is "+str(avg))
