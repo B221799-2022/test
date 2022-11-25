@@ -51,3 +51,5 @@ while 1:
   if gr==1:
     break
 
+#tell user that is the end of the programme
+print("That is all for the programme\nThanks for using\nBye!")
